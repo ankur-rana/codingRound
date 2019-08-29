@@ -1,14 +1,16 @@
 package Scripts;
 import com.sun.javafx.PlatformUtil;
+
+import Utilities.BaseLib;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class SignInTest {
+public class SignInTest extends BaseLib {
 
-    WebDriver driver = new ChromeDriver();
 
     @Test
     public void shouldThrowAnErrorIfSignInDetailsAreMissing() {

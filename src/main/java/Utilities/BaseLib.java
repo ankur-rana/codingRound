@@ -11,6 +11,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
+
 import com.sun.javafx.PlatformUtil;
 
 /**
@@ -23,9 +25,13 @@ public class BaseLib {
 	private WebDriver edriver = null;
 	public static EventFiringWebDriver driver = null;
 	private Listeners listeners = null;
+	public static String credentialsAndEnvironmentSetupFilePath = System.getProperty("user.dir")+"\\CredentialsAndEnvironmentSetup.properties";
+	private static String BaseURL = CommonLibrary.readDataFromPropertyFile(credentialsAndEnvironmentSetupFilePath, "BaseURL");
 	
+	@Parameters(value = "browser")
 	@BeforeMethod
 	public void browserLauncher(String browserName){
+		System.err.println(browserName);
 		if (browserName.equalsIgnoreCase("Chrome")) {
 			setDriverPath();
 			ChromeOptions options = new ChromeOptions();
@@ -48,6 +54,7 @@ public class BaseLib {
 		listeners = new Listeners();
 		driver = new EventFiringWebDriver(edriver);
 		driver.register(listeners);
+		driver.get(BaseURL);
 	}
 	
 	@AfterMethod
@@ -55,15 +62,15 @@ public class BaseLib {
 		driver.quit();
 	}
 	
-	private static void setDriverPath() {
+	private void setDriverPath() {
         if (PlatformUtil.isMac()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
+            System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/driverFiles/chromedriver");
         }
         if (PlatformUtil.isWindows()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/driverFiles/chromedriver.exe");
         }
         if (PlatformUtil.isLinux()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
+            System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/driverFiles/chromedriver_linux");
         }
     }
 }

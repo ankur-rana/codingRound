@@ -1,6 +1,5 @@
 package Scripts;
 
-import com.sun.javafx.PlatformUtil;
 import Utilities.BaseLib;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -9,13 +8,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.Reporter;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 public class FlightBookingTest extends BaseLib {
 
-    WebDriver driver = new ChromeDriver();
 
 
     @Test
@@ -24,10 +23,9 @@ public class FlightBookingTest extends BaseLib {
         driver.get("https://www.cleartrip.com/");
         waitFor(2000);
         driver.findElement(By.id("OneWay")).click();
-
+        Reporter.log("one way",true);
         driver.findElement(By.id("FromTag")).clear();
         driver.findElement(By.id("FromTag")).sendKeys("Bangalore");
-
         //wait for the auto complete options to appear for the origin
 
         waitFor(2000);
