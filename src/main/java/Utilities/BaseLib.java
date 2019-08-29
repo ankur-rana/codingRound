@@ -26,10 +26,8 @@ public class BaseLib {
 	
 	@BeforeMethod
 	public void browserLauncher(String browserName){
-		setDriverPath();
 		if (browserName.equalsIgnoreCase("Chrome")) {
-			System.setProperty("webdriver.chrome.driver",
-					System.getProperty("user.dir") + "\\exefiles\\chromedriver.exe");
+			setDriverPath();
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("disable-infobars");
 			options.addArguments("--start-maximized");

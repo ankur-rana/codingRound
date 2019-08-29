@@ -19,7 +19,7 @@ import org.openqa.selenium.WebElement;
  */
 public class CommonLibrary {
 
-	public static WebElement FindElement(WebDriver driver, String xpath, int timeOut){
+	public static WebElement findElement(WebDriver driver, String xpath, int timeOut){
 
 		try {
 			int timeout = 0;
@@ -43,7 +43,7 @@ public class CommonLibrary {
 		}
 	}
 	
-	private static void waitFor(int durationInMilliSeconds) {
+	public static void waitFor(int durationInMilliSeconds) {
         try {
             Thread.sleep(durationInMilliSeconds);
         } catch (InterruptedException e) {

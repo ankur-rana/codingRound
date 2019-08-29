@@ -27,7 +27,7 @@ public abstract class BasePage {
 	}
 	
 	public static boolean clickOnTabs(WebDriver driver, TabName tabName){
-		WebElement element = FindElement(driver, "//a[text()='"+tabName.toString()+"']", 30);
+		WebElement element = findElement(driver, "//a[text()='"+tabName.toString()+"']", 30);
 		if(click(driver, element)){
 			return true;
 		} 
