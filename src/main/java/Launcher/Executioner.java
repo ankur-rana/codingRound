@@ -3,7 +3,6 @@
  */
 package Launcher;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,7 +11,6 @@ import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
-
 import Utilities.BaseLib;
 import Utilities.CommonLibrary;
 
@@ -40,7 +38,6 @@ public class Executioner {
 		@SuppressWarnings("rawtypes")
 		Class[] classesInScriptPackage = CommonLibrary.getClasses("Scripts");
 		for(int i = 0; i < classesInScriptPackage.length; i++){
-			System.err.println(classesInScriptPackage[i].toString());
 			xmlClass.add(new XmlClass(classesInScriptPackage[i].toString().split("class ")[1]));
 			classes.add(xmlClass.get(i));
 		}

@@ -1,0 +1,25 @@
+* Driver is not intialised properly.
+* Proper driver path is not set.
+* Improper usage of wait.
+* Improper page object repository.
+* Improper auto-suggest handling.
+* Imporper date picker handling
+* Improper Testcases, if these are based on some testcase.
+
+1. In class FlgihtBookingTest
+	a) driver is getting intialised without setting the driver path.
+	b) No centralised repository for webElements.
+	c) Methods which can be centralised were kept in the Test class only.
+	d) Using Hard Coded Waits.
+	e) Driver path is not set properly.
+
+2. In Class HotelBookingTest
+	a) No centralised repository for webElements.
+	b) No proper intialisation of the webElements.
+	c) Imroper handling of auto suggest drop down.
+	d) Driver path is not set properly.
+
+3. In Class SignInTest
+	a) Improper usage of wait.
+	b) Driver path is not set properly.
+	C) Frame is not handled.

@@ -1,17 +1,11 @@
 package Scripts;
 
 import Utilities.BaseLib;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
-import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
-
-import java.util.List;
+import org.testng.asserts.SoftAssert;
+import PageObjects.FlightBookingPage;
+import static Utilities.CommonLibrary.*;
 
 public class FlightBookingTest extends BaseLib {
 
@@ -19,60 +13,64 @@ public class FlightBookingTest extends BaseLib {
 
     @Test
     public void testThatResultsAppearForAOneWayJourney() {
-
-        driver.get("https://www.cleartrip.com/");
-        waitFor(2000);
-        driver.findElement(By.id("OneWay")).click();
-        Reporter.log("one way",true);
-        driver.findElement(By.id("FromTag")).clear();
-        driver.findElement(By.id("FromTag")).sendKeys("Bangalore");
-        //wait for the auto complete options to appear for the origin
-
-        waitFor(2000);
-        List<WebElement> originOptions = driver.findElement(By.id("ui-id-1")).findElements(By.tagName("li"));
-        originOptions.get(0).click();
-
-        driver.findElement(By.id("toTag")).clear();
-        driver.findElement(By.id("toTag")).sendKeys("Delhi");
-
-        //wait for the auto complete options to appear for the destination
-
-        waitFor(2000);
-        //select the first item from the destination auto complete list
-        List<WebElement> destinationOptions = driver.findElement(By.id("ui-id-2")).findElements(By.tagName("li"));
-        destinationOptions.get(0).click();
-
-        driver.findElement(By.xpath("//*[@id='ui-datepicker-div']/div[1]/table/tbody/tr[3]/td[7]/a")).click();
-
-        //all fields filled in. Now click on search
-        driver.findElement(By.id("SearchBtn")).click();
-
-        waitFor(5000);
-        //verify that result appears for the provided journey search
-        Assert.assertTrue(isElementPresent(By.className("searchSummary")));
-
-        //close the browser
-        driver.quit();
-
-    }
-
-
-    private void waitFor(int durationInMilliSeconds) {
-        try {
-            Thread.sleep(durationInMilliSeconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        FlightBookingPage fbp = new FlightBookingPage(driver);
+        SoftAssert sa= new SoftAssert();
+        if(click(driver, fbp.getOneWayRadioButton(30))){
+        	Reporter.log("Clicked on one way radio button.");
+        	if(sendKeys(driver, fbp.getFromTextBox(30), "Bangalore")){
+        		Reporter.log("Passed value to from text box.");
+        		if(fbp.selectValueFromTheSuggestions("Bangalore", 30)){
+        			if(sendKeys(driver, fbp.getToTextBox(30), "Delhi")){
+                		Reporter.log("Passed value to 'To' text box.");
+                		if(fbp.selectValueFromTheSuggestions("Delhi", 30)){
+                			if(click(driver, fbp.getDepartDatePickerTextBox(30))){
+                				if(fbp.selectCurrentDate(30)){
+                					Reporter.log("Successfully selected the date from date picker");
+                					if(click(driver, fbp.getSearchFlightsButton(30))){
+                						Reporter.log("Successfully clicked on search flight button.");
+                						if(fbp.getSearchSummaryHeader(30)!=null){
+                							String text = fbp.getSearchSummaryHeader(30).getText();
+                							sa.assertTrue(text.contains("Bangalore") && text.contains("Delhi"), "Search summary of searched flight is not displaying. Expected: Bangalore To Delhi\tActual:"+text);
+                						} else {
+                							Reporter.log("Search summary is not displaying.");
+                							sa.assertTrue(false, "Search summary is not displaying.");
+                						}
+                					} else {
+                						Reporter.log("Cannot click on search flight button, So cannot continue with the execution.");
+                						sa.assertTrue(false, "Cannot click on search flight button, So din't continue with the execution.");
+                					}
+                				} else {
+                					Reporter.log("Not able to select current date, So cannot continue with the execution.");
+                					sa.assertTrue(false, "Not able to select current date, So din't continue with the execution.");
+                				}
+                			} else {
+                				Reporter.log("Not able to click on Depart Date picker, So cannot continue with the execution.");
+                				sa.assertTrue(false, "Not able to click on Depart Date picker, So din't continue with the execution.");
+                			}
+                		} else {
+                			Reporter.log("Not able to select value from the 'To' suggestions.");
+                			sa.assertTrue(false, "Not able to select value from the 'To' suggestions.");
+                		}
+                	} else {
+                		Reporter.log("Cannot enter text in 'To' text box, So cannot continue with the execution.");
+                		sa.assertTrue(false, "Cannot enter text in 'To' text box, So din't continue with the execution.");
+                	}
+        		} else {
+        			Reporter.log("Not able to select value from the suggestions.");
+        			sa.assertTrue(false, "Not able to select value from the suggestions.");
+        		}
+        	} else {
+        		Reporter.log("Cannot enter text in from text box, So cannot continue with the execution.");
+        		sa.assertTrue(false, "Cannot enter text in from text box, So din't continue with the execution.");
+        	}
+        } else {
+        	Reporter.log("Cannot click on One Way radio button, So cannot continue with the execution.");
+        	sa.assertTrue(false, "Cannot click on One Way radio button, So din't continue with the execution.");
         }
+        sa.assertAll();
     }
 
 
-    private boolean isElementPresent(By by) {
-        try {
-            driver.findElement(by);
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
+    
     
 }
